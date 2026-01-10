@@ -1,0 +1,12 @@
+
+/vendor/
+/var/
+/.env.local
+/.env.*.local
+/public/bundles/
+/public/uploads/*
+!/public/uploads/covers  
+/phpunit.xml
+.phpunit.result.cache
+.idea/
+.vscode/
