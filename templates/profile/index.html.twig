@@ -3,14 +3,275 @@
 {% block title %}My Profile{% endblock %}
 
 {% block body %}
-<h1>My Profile</h1>
-<hr>
 <div class="row">
-    <div class="col-md-6">
-        {{ form_start(form) }}
-            {{ form_widget(form) }}
-            <button class="btn btn-success mt-3">Update Profile</button>
-        {{ form_end(form) }}
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0"><i class="fas fa-user me-2"></i>My Profile</h2>
+            </div>
+            <div class="card-body">
+                <!-- Navigation Tabs -->
+                <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button" role="tab" aria-controls="personal" aria-selected="true">
+                            <i class="fas fa-user-edit me-1"></i>Personal Information
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="false">
+                            <i class="fas fa-shopping-bag me-1"></i>My Orders
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab" aria-controls="security" aria-selected="false">
+                            <i class="fas fa-shield-alt me-1"></i>Security
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content mt-4" id="profileTabsContent">
+                    <!-- Personal Information Tab -->
+                    <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="personal-tab">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4>Update Your Information</h4>
+                                <p class="text-muted">Keep your personal information up to date.</p>
+                                {{ form_start(form, {'attr': {'class': 'mt-4'}}) }}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_label(form.firstname) }}
+                                            {{ form_widget(form.firstname, {'attr': {'class': 'form-control'}}) }}
+                                            {{ form_errors(form.firstname) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_label(form.lastname) }}
+                                            {{ form_widget(form.lastname, {'attr': {'class': 'form-control'}}) }}
+                                            {{ form_errors(form.lastname) }}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            {{ form_label(form.phone) }}
+                                            {{ form_widget(form.phone, {'attr': {'class': 'form-control'}}) }}
+                                            {{ form_errors(form.phone) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control" value="{{ app.user.email }}" readonly>
+                                            <small class="text-muted">Email cannot be changed</small>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        {{ form_label(form.address) }}
+                                        {{ form_widget(form.address, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+                                        {{ form_errors(form.address) }}
+                                    </div>
+                                    <button class="btn btn-success mt-4">
+                                        <i class="fas fa-save me-2"></i>Update Profile
+                                    </button>
+                                {{ form_end(form) }}
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-user-circle fa-4x text-secondary mb-3"></i>
+                                        <h5>{{ app.user.firstname }} {{ app.user.lastname }}</h5>
+                                        <p class="text-muted">{{ app.user.email }}</p>
+                                        <span class="badge bg-primary">Member since {{ 'now'|date('M Y') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orders Tab -->
+                    <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h4>My Order History</h4>
+                                <p class="text-muted">Track your orders and view order details.</p>
+                            </div>
+                            <a href="{{ path('app_orders') }}" class="btn btn-primary">
+                                <i class="fas fa-eye me-2"></i>View All Orders
+                            </a>
+                        </div>
+
+                        {% if app.user.orders|length > 0 %}
+                            <div class="row">
+                                {% for order in app.user.orders|slice(0, 3) %}
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <h6 class="card-title mb-0">Order #{{ order.reference }}</h6>
+                                                    <span class="badge
+                                                        {% if order.status == 'PENDING' %}bg-warning
+                                                        {% elseif order.status == 'CONFIRMED' %}bg-info
+                                                        {% elseif order.status == 'SHIPPED' %}bg-primary
+                                                        {% else %}bg-secondary{% endif %}">
+                                                        {{ order.status }}
+                                                    </span>
+                                                </div>
+                                                <p class="card-text small text-muted mb-2">
+                                                    <i class="fas fa-calendar me-1"></i>{{ order.createdAtFormatted }}
+                                                </p>
+                                                <p class="card-text">
+                                                    <strong>Total: €{{ order.total }}</strong>
+                                                </p>
+                                                <p class="card-text small">
+                                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                                    {{ order.deliveryAddress ?: 'Address not specified' }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% if app.user.orders|length > 3 %}
+                                <div class="text-center mt-3">
+                                    <a href="{{ path('app_orders') }}" class="btn btn-outline-primary">
+                                        View All {{ app.user.orders|length }} Orders
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
+                                <h5>No Orders Yet</h5>
+                                <p class="text-muted">You haven't placed any orders yet. Start shopping to see your order history here!</p>
+                                <a href="{{ path('app_home') }}" class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart me-2"></i>Start Shopping
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Security Tab -->
+                    <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4>Account Security</h4>
+                                <p class="text-muted">Manage your account security settings.</p>
+
+                                <div class="card mt-4">
+                                    <div class="card-body">
+                                        <h6>Password</h6>
+                                        <p class="text-muted small">Last updated: Never</p>
+                                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                                            <i class="fas fa-key me-2"></i>Change Password
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h6>Two-Factor Authentication</h6>
+                                        <p class="text-muted small">Add an extra layer of security to your account.</p>
+                                        <button class="btn btn-outline-success btn-sm" disabled>
+                                            <i class="fas fa-mobile-alt me-2"></i>Enable 2FA (Coming Soon)
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="card mt-3 border-danger">
+                                    <div class="card-body">
+                                        <h6 class="text-danger">Danger Zone</h6>
+                                        <p class="text-muted small">Irreversible actions that will affect your account.</p>
+                                        <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                                            <i class="fas fa-trash me-2"></i>Delete Account
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6>Account Status</h6>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-shield-alt text-success me-2"></i>
+                                            <span>Account Secure</span>
+                                        </div>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-envelope text-info me-2"></i>
+                                            <span>Email Verified</span>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-user text-primary me-2"></i>
+                                            <span>Active Member</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ path('app_change_password') }}" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="current_password" name="current_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password[first]" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirm_password" name="new_password[second]" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteAccountModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Delete Account
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ path('app_delete_account') }}" method="post">
+                <div class="modal-body">
+                    <div class="alert alert-danger">
+                        <strong>Warning!</strong> This action cannot be undone. This will permanently delete your account and all associated data including orders and personal information.
+                    </div>
+                    <p class="text-muted">Please enter your password to confirm account deletion:</p>
+                    <div class="mb-3">
+                        <label for="delete_password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="delete_password" name="delete_password" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Yes, Delete My Account
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

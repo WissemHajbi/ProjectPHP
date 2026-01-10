@@ -3,12 +3,51 @@
 {% block content_title %}Welcome to MyBookstore Admin{% endblock %}
 
 {% block main %}
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-book fa-2x text-primary mb-2"></i>
+                    <h4 class="card-title">{{ book_count }}</h4>
+                    <p class="card-text">Total Books</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-users fa-2x text-success mb-2"></i>
+                    <h4 class="card-title">{{ user_count }}</h4>
+                    <p class="card-text">Total Users</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-shopping-cart fa-2x text-warning mb-2"></i>
+                    <h4 class="card-title">{{ order_count }}</h4>
+                    <p class="card-text">Total Orders</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-euro-sign fa-2x text-info mb-2"></i>
+                    <h4 class="card-title">€{{ total_revenue|number_format(2) }}</h4>
+                    <p class="card-text">Total Revenue</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Management Area</h5>
-                    <p class="card-text">Select a section from the menu on the left.</p>
+                    <p class="card-text">Select a section from the menu on the left to manage your bookstore.</p>
                 </div>
             </div>
         </div>

@@ -71,6 +71,11 @@ class Order
         return $this->createdAt;
     }
 
+    public function getCreatedAtFormatted(): string
+    {
+        return $this->createdAt?->format('Y-m-d H:i:s') ?? '';
+    }
+
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;

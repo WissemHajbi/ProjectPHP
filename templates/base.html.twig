@@ -1,16 +1,167 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}MyBookstore{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>📚</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Encore instead of generic links #}
-        
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
         {% block stylesheets %}
+        <style>
+            :root {
+                --primary: #2C3E50;
+                --secondary: #3498DB;
+                --accent: #E74C3C;
+                --neutral: #ECF0F1;
+                --text: #2C3E50;
+                --light: #F8F9FA;
+            }
+
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: var(--neutral);
+                color: var(--text);
+                line-height: 1.6;
+            }
+
+            .navbar {
+                background: linear-gradient(135deg, var(--primary) 0%, #34495E 100%);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                transition: all 0.3s ease;
+            }
+
+            .navbar-brand {
+                font-weight: 700;
+                font-size: 1.5rem;
+                color: var(--neutral) !important;
+            }
+
+            .nav-link {
+                font-weight: 500;
+                transition: color 0.3s ease;
+            }
+
+            .nav-link:hover {
+                color: var(--secondary) !important;
+            }
+
+            .btn-primary {
+                background-color: var(--secondary);
+                border-color: var(--secondary);
+                transition: all 0.3s ease;
+            }
+
+            .btn-primary:hover {
+                background-color: #2980B9;
+                border-color: #2980B9;
+                transform: translateY(-1px);
+            }
+
+            .btn-danger {
+                background-color: var(--accent);
+                border-color: var(--accent);
+                transition: all 0.3s ease;
+            }
+
+            .btn-danger:hover {
+                background-color: #C0392B;
+                border-color: #C0392B;
+                transform: translateY(-1px);
+            }
+
+            .card {
+                border: none;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                transition: all 0.3s ease;
+                overflow: hidden;
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            }
+
+            .card-img-top {
+                transition: transform 0.3s ease;
+            }
+
+            .card:hover .card-img-top {
+                transform: scale(1.05);
+            }
+
+            .footer {
+                background: var(--primary);
+                color: var(--neutral);
+                padding: 2rem 0;
+                margin-top: 4rem;
+            }
+
+            .animate-fade-in {
+                animation: fadeIn 0.5s ease-in;
+            }
+
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            .hero-section {
+                background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+                color: white;
+                padding: 4rem 0;
+                text-align: center;
+                margin-bottom: 3rem;
+            }
+
+            .hero-section h1 {
+                font-size: 3rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+            }
+
+            .hero-section p {
+                font-size: 1.2rem;
+                opacity: 0.9;
+            }
+
+            .filter-card {
+                background: white;
+                border-radius: 12px;
+                padding: 1.5rem;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+
+            .table {
+                border-radius: 8px;
+                overflow: hidden;
+            }
+
+            .table thead th {
+                background-color: var(--primary);
+                color: white;
+                border: none;
+                font-weight: 600;
+            }
+
+            .alert {
+                border-radius: 8px;
+                border: none;
+            }
+
+            .btn-outline-info {
+                border-color: var(--secondary);
+                color: var(--secondary);
+            }
+
+            .btn-outline-info:hover {
+                background-color: var(--secondary);
+                border-color: var(--secondary);
+            }
+        </style>
         {% endblock %}
 
         {% block javascripts %}
@@ -18,50 +169,71 @@
         {% endblock %}
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
-                <a class="navbar-brand" href="{{ path('app_home') }}">MyBookstore</a>
+                <a class="navbar-brand" href="{{ path('app_home') }}">
+                    <i class="fas fa-book me-2"></i>MyBookstore
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_home') }}">Home</a>
+                            <a class="nav-link" href="{{ path('app_home') }}"><i class="fas fa-home me-1"></i>Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a>
+                            <a class="nav-link position-relative" href="{{ path('app_cart') }}">
+                                <i class="fas fa-shopping-cart me-1"></i>Cart
+                                {% if app.user %}
+                                    {% set cart_count = 0 %}
+                                    {% for quantity in app.session.get('cart', {}) %}
+                                        {% set cart_count = cart_count + quantity %}
+                                    {% endfor %}
+                                    {% if cart_count > 0 %}
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            {{ cart_count }}
+                                            <span class="visually-hidden">items in cart</span>
+                                        </span>
+                                    {% endif %}
+                                {% endif %}
+                            </a>
                         </li>
                     </ul>
-                    <div class="d-flex">
+                    <div class="d-flex align-items-center">
                         {% if app.user %}
                             <div class="dropdown">
-                                <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ app.user.email }}
-                                </a>
+                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user me-1"></i>{{ app.user.firstname }}
+                                </button>
                                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" href="{{ path('app_profile') }}">Profile</a></li>
-                                    <li><a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_profile') }}"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_orders') }}"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                                     {% if is_granted('ROLE_AGENT') %}
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="{{ path('admin') }}">Dashboard</a></li>
+                                        <li><a class="dropdown-item" href="{{ path('admin') }}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
                                     {% endif %}
                                 </ul>
                             </div>
                         {% else %}
-                            <a href="{{ path('app_login') }}" class="btn btn-outline-light me-2">Login</a>
-                            <a href="{{ path('app_register') }}" class="btn btn-warning">Sign-up</a>
+                            <a href="{{ path('app_login') }}" class="btn btn-outline-light me-2"><i class="fas fa-sign-in-alt me-1"></i>Login</a>
+                            <a href="{{ path('app_register') }}" class="btn btn-warning"><i class="fas fa-user-plus me-1"></i>Sign-up</a>
                         {% endif %}
                     </div>
                 </div>
             </div>
         </nav>
 
-        <div class="container">
+        {% block hero %}{% endblock %}
+
+        <div class="container animate-fade-in">
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
+                    <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-{{ label == 'success' ? 'check-circle' : (label == 'error' ? 'exclamation-triangle' : 'info-circle') }} me-2"></i>
                         {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 {% endfor %}
             {% endfor %}
@@ -69,9 +241,28 @@
             {% block body %}{% endblock %}
         </div>
 
-        <footer class="text-center text-lg-start bg-light text-muted mt-5">
-            <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-                © 2024 MyBookstore
+        <footer class="footer text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <h5><i class="fas fa-book me-2"></i>MyBookstore</h5>
+                        <p>Your trusted source for quality books.</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h5>Quick Links</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="{{ path('app_home') }}" class="text-light text-decoration-none">Home</a></li>
+                            <li><a href="{{ path('app_cart') }}" class="text-light text-decoration-none">Cart</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h5>Contact</h5>
+                        <p><i class="fas fa-envelope me-2"></i>info@mybookstore.com</p>
+                        <p><i class="fas fa-phone me-2"></i>+1 (555) 123-4567</p>
+                    </div>
+                </div>
+                <hr class="my-4">
+                <p class="mb-0">&copy; 2024 MyBookstore. All rights reserved.</p>
             </div>
         </footer>
 

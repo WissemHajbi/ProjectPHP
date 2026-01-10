@@ -31,10 +31,7 @@ class UserCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('User')
             ->setEntityLabelInPlural('Users')
-            ->setPageTitle(Crud::PAGE_INDEX, 'Manage Users')
-            ->setPermission(Action::NEW, 'ROLE_ADMIN')
-            ->setPermission(Action::EDIT, 'ROLE_ADMIN')
-            ->setPermission(Action::DELETE, 'ROLE_ADMIN');
+            ->setPageTitle(Crud::PAGE_INDEX, 'Manage Users');
     }
 
     public function configureActions(Actions $actions): Actions

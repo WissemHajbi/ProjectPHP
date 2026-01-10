@@ -28,14 +28,25 @@ class HomeController extends AbstractController
             'publisher' => $request->query->get('publisher'),
         ];
 
+        $page = max(1, $request->query->getInt('page', 1));
+        $limit = 12; // Books per page
+
         $books = $bookRepository->findBySearch($search);
+        $totalBooks = count($books);
+        $totalPages = ceil($totalBooks / $limit);
+        $offset = ($page - 1) * $limit;
+
+        $paginatedBooks = array_slice($books, $offset, $limit);
 
         return $this->render('home/index.html.twig', [
-            'books' => $books,
+            'books' => $paginatedBooks,
             'categories' => $categoryRepository->findAll(),
             'authors' => $authorRepository->findAll(),
             'publishers' => $publisherRepository->findAll(),
             'search' => $search,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalBooks' => $totalBooks,
         ]);
     }
     
@@ -43,13 +54,24 @@ class HomeController extends AbstractController
     public function show(int $id, BookRepository $bookRepository): Response
     {
         $book = $bookRepository->find($id);
-        
+
         if (!$book) {
             throw $this->createNotFoundException('Book not found');
         }
 
+        // Get related books (same category, excluding current book)
+        $relatedBooks = $bookRepository->createQueryBuilder('b')
+            ->where('b.category = :category')
+            ->andWhere('b.id != :currentId')
+            ->setParameter('category', $book->getCategory())
+            ->setParameter('currentId', $book->getId())
+            ->setMaxResults(4)
+            ->getQuery()
+            ->getResult();
+
         return $this->render('home/show.html.twig', [
             'book' => $book,
+            'relatedBooks' => $relatedBooks,
         ]);
     }
 }
