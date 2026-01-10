@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order Confirmed{% endblock %}
+
+{% block body %}
+<div class="text-center mt-5">
+    <h1 class="text-success"><i class="fas fa-check-circle"></i> Thank You!</h1>
+    <p class="lead">Your order <strong>#{{ order.reference }}</strong> has been placed successfully.</p>
+    <p>Total amount: <strong>{{ order.total }} €</strong></p>
+    <a href="{{ path('app_home') }}" class="btn btn-primary">Return to Store</a>
+</div>
+{% endblock %}
