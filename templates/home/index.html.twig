@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MyBookstore - Catalog{% endblock %}
+
+{% block body %}
+<div class="row">
+    <!-- Sidebar Filters -->
+    <div class="col-md-3">
+        <div class="card mb-4">
+            <div class="card-header">Filters</div>
+            <div class="card-body">
+                <form action="{{ path('app_home') }}" method="get">
+                    <div class="mb-3">
+                        <label class="form-label">Search</label>
+                        <input type="text" name="q" class="form-control" value="{{ search.q }}" placeholder="Title, author...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select name="category" class="form-select">
+                            <option value="">All</option>
+                            {% for c in categories %}
+                                <option value="{{ c.id }}" {{ search.category == c.id ? 'selected' : '' }}>{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Author</label>
+                        <select name="author" class="form-select">
+                            <option value="">All</option>
+                            {% for a in authors %}
+                                <option value="{{ a.id }}" {{ search.author == a.id ? 'selected' : '' }}>{{ a.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Publisher</label>
+                        <select name="publisher" class="form-select">
+                            <option value="">All</option>
+                            {% for p in publishers %}
+                                <option value="{{ p.id }}" {{ search.publisher == p.id ? 'selected' : '' }}>{{ p.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    <a href="{{ path('app_home') }}" class="btn btn-outline-secondary w-100 mt-2">Clear</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Listings -->
+    <div class="col-md-9">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for book in books %}
+                <div class="col">
+                    <div class="card h-100">
+                        {% if book.coverImage %}
+                             <img src="{{ asset('uploads/covers/' ~ book.coverImage) }}" class="card-img-top" alt="{{ book.title }}" style="height: 300px; object-fit: cover;">
+                        {% else %}
+                             <div class="d-flex justify-content-center align-items-center bg-secondary text-white" style="height: 300px;">No Cover</div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text text-muted">{{ book.authors|map(a => a.name)|join(', ') }}</p>
+                            <p class="card-text fw-bold">{{ book.price }} €</p>
+                            <a href="{{ path('app_book_show', {id: book.id}) }}" class="btn btn-info btn-sm">Details</a>
+                            <a href="{{ path('app_cart_add', {id: book.id}) }}" class="btn btn-primary btn-sm">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info">No books found matching your criteria.</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

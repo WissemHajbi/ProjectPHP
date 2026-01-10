@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block body %}
+<div class="row mt-4">
+    <div class="col-md-4">
+        {% if book.coverImage %}
+            <img src="{{ asset('uploads/covers/' ~ book.coverImage) }}" class="img-fluid rounded" alt="{{ book.title }}">
+        {% else %}
+            <div class="bg-secondary text-white p-5 text-center">No Cover</div>
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <h1>{{ book.title }}</h1>
+        <h4 class="text-muted">{{ book.authors|map(a => a.name)|join(', ') }}</h4>
+        <p class="badge bg-secondary">{{ book.category.name }}</p>
+        <p class="badge bg-info text-dark">{{ book.publisher.name }}</p>
+        <h2 class="text-primary mt-3">{{ book.price }} €</h2>
+        
+        {% if book.stock > 0 %}
+            <p class="text-success"><i class="fas fa-check"></i> In Stock ({{ book.stock }})</p>
+        {% else %}
+            <p class="text-danger"><i class="fas fa-times"></i> Out of Stock</p>
+            
+        {% endif %}
+
+        <hr>
+        <p>{{ book.description|nl2br }}</p>
+
+        <a href="{{ path('app_cart_add', {id: book.id}) }}" class="btn btn-lg btn-primary mt-3 {{ book.stock <= 0 ? 'disabled' : '' }}">Add to Cart</a>
+        <a href="{{ path('app_home') }}" class="btn btn-outline-secondary mt-3 ms-2">Back to Catalog</a>
+    </div>
+</div>
+{% endblock %}
