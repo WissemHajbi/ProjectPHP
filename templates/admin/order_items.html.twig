@@ -1,0 +1,22 @@
+{# templates/admin/order_items.html.twig #}
+<h3>Items</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Book</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in field.value %}
+        <tr>
+            <td>{{ item.bookTitle }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.price }} €</td>
+            <td>{{ item.quantity * item.price }} €</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
