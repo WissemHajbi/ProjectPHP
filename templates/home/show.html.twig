@@ -88,7 +88,7 @@
                         <div class="mt-auto">
                             <h5 class="mb-3"><i class="fas fa-info-circle me-2"></i>Description</h5>
                             <div class="border-start border-primary border-4 ps-3">
-                                <p class="mb-0 text-muted">{{ book.description|nl2br }}</p>
+                                <div class="text-muted">{{ book.description|raw }}</div>
                             </div>
                         </div>
                     </div>
